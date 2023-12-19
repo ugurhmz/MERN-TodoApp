@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const UserModel = require("../models/UserModel");
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const UserModel = require("../models/UserModel")
 
 // Registration
 exports.registerUserController = async (req, res) => {
@@ -61,11 +61,19 @@ exports.loginUserController = async (req, res) => {
     }
 
     // Create a JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
 
-    res.status(200).json({ token });
+    res.status(200).json({
+      message: "Login successful /W/",
+      user: {
+        userId: user._id,
+        userName: user.userName,
+        userMail: user.userMail,
+      },
+      token,
+    })
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Login failed!" })
   }
-};
+}
