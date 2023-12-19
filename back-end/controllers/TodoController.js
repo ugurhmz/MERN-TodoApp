@@ -1,30 +1,33 @@
-const TodoModel = require("../models/TodoModel")
+const TodoModel   = require("../models/TodoModel")
+const UserModel = require("../models/UserModel")
 
-
-// CREATE TODO
 exports.createTodoController = async (req,res) => {
-    const newTodo = new TodoModel(req.body)
-
     try {
+        const { todoTitle, todoDesc } = req.body
+        const userId = req._id
+
+        const findPerson = await UserModel.findById(userId)
+        if (!person) {
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        // create new todo
+        const newTodo = TodoModel({ todoTitle, todoPerson: findPerson._id, todoDesc })
+
+        // check Todo owner 
+        if(newTodo.todoPerson.toString() !== userId) {
+            return res.status(403).json({ error: "Unauthorized operation" })
+        }
+
         const savedTodo = await newTodo.save()
-        res.status(200).json(savedTodo)
-    } catch(err) {
-        res.status(500).json(err)
-    }
-}
+        // Person modelindeki personTodos alanına eklenen todo'nun ID'sini ekle
+        findPerson.personTodos.push(savedTodo._id)
+        await person.save();
 
-// GET ALL TODOS
-exports.getAllTodosController = async (req,res) => {
-    try {
-        const allTodos = await TodoModel.find()
-        .populate({
-            path:"todoPerson",
-            select:"personName"
-        })
-
-        res.status(200).json(allTodos)
+        res.status(201).json(savedTodo)
 
     } catch(err) {
-        res.status(500).json(err)
+        console.error(err)
+        res.status(500).json({ err: "Todo creation failed" })
     }
 }
