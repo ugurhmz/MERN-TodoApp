@@ -4,6 +4,6 @@ const router = express.Router()
 
 
 router.post("/create-todo",createTodoController)
-router.get("/todos", getAllTodosController)
+router.get("/all-todos", getAllTodosController)
 
 module.exports = router
