@@ -3,8 +3,7 @@ const app = express()
 const dotenv = require("dotenv")
 const cors = require('cors')
 const connectDB = require('./database/db')
-const todoRoute = require("./routes/todo.js")
-const personRoute = require("./routes/person.js")
+
 
 dotenv.config()
 
@@ -14,9 +13,8 @@ connectDB()
 app.use(cors())
 app.use(express.json())
 
-// REQUEST
-app.use("/ugurv1", todoRoute)
-app.use("/ugurv1", personRoute)
+// Main Route
+app.use("/ugurv1/api", appRoutes)
 
 
 app.listen(process.env.PORT || 3500, () => {
