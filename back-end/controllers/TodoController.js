@@ -12,3 +12,19 @@ exports.createTodoController = async (req,res) => {
         res.status(500).json(err)
     }
 }
+
+// GET ALL TODOS
+exports.getAllTodosController = async (req,res) => {
+    try {
+        const allTodos = await TodoModel.find()
+        .populate({
+            path:"todoPerson",
+            select:"personName"
+        })
+
+        res.status(200).json(allTodos)
+
+    } catch(err) {
+        res.status(500).json(err)
+    }
+}

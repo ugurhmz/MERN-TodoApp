@@ -12,3 +12,5 @@ exports.createPersonController = async (req,res) => {
         res.status(500).json(err)
     }
 }
+
+// GET
