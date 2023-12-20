@@ -1,10 +1,19 @@
+const { default: mongoose } = require("mongoose")
 const TodoModel = require("../models/TodoModel")
 
-const checkTodoOwnerShip = async (req,res, next) => {
+exports.checkTodoOwnerShip = async (req,res, next) => {
     try {
 
-        const userId = req._id
+        console.log("Ship->req.userId",req.userId)
+        const userId = req.userId
         const todoId = req.params.todoId
+
+        if (!mongoose.Types.ObjectId.isValid(todoId)) {
+            return res.status(400).json({
+              error: "Invalid todoId format",
+            });
+          }
+      
 
         // Find  the todo of owner
         const todo = await TodoModel.findById(todoId)
@@ -31,5 +40,3 @@ const checkTodoOwnerShip = async (req,res, next) => {
         })
     }
 }
-
-module.exports = { checkTodoOwnerShip }
