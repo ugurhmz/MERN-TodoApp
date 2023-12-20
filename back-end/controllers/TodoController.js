@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose")
 const TodoModel   = require("../models/TodoModel")
 const UserModel = require("../models/UserModel")
 
+// Create TODO
 exports.createTodoController = async (req,res) => {
     try {
         const { todoTitle, todoDesc } = req.body
@@ -33,6 +34,8 @@ exports.createTodoController = async (req,res) => {
     }
 }
 
+
+// Delete TODO
 exports.deleteTodoController = async (req,res) =>{
     try {
         const todoId = req.params.todoId
