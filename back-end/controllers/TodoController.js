@@ -78,3 +78,42 @@ exports.deleteTodoController = async (req,res) =>{
         res.status(500).json({ error: "Todo deletion failed" })
     }
 }
+
+// Update TODO
+exports.updateTodoController = async ( req,res) => {
+    try {
+         const todoId = req.params.todoId
+         const userId = req.userId
+         const { todoTitle, todoDesc } = req.body
+
+         if(!mongoose.Types.ObjectId.isValid(todoId)){
+            return res.status(400).json({error:"Invalid todoId!"}
+            )
+         }
+
+         const findTodo = await TodoModel.findById(todoId)
+
+         if(!findTodo){
+            return res.status(404).json({eror:"Todo not found!"})
+         }
+
+         // Chekc if the user owner of the todo ?
+         if(findTodo.todoUser.toString() !== userId){
+            return res.status(404).json({error:"Unauthorized operation!"})
+         }
+
+
+         findTodo.todoTitle = todoTitle || findTodo.todoTitle
+         findTodo.todoDesc  = todoDesc || findTodo.todoDesc
+
+         const updatedTodo = await findTodo.save()
+
+         res.status(200).json({
+            message: "Update successful",
+            updatedTodo
+         })
+
+    } catch(err) {
+        res.status(500).json(err)
+    }
+}
