@@ -40,28 +40,29 @@ exports.registerUserController = async (req, res) => {
 // Login
 exports.loginUserController = async (req, res) => {
   try {
+
     const { userMail, password } = req.body;
 
     // Check if the email is in the correct format
     if (!userMail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      return res.status(400).json({ error: "Invalid email format!" })
+      return res.status(400).json({ error: "Invalid email format!" });
     }
 
     // Check if the user exists
-    const user = await UserModel.findOne({ userMail })
+    const user = await UserModel.findOne({ userMail });
     if (!user) {
-      return res.status(401).json({ error: "User not found!" })
+      return res.status(401).json({ error: "User not found!" });
     }
 
     // Compare the provided password with the hashed password in the database
-    const passwordMatch = await bcrypt.compare(password, user.password)
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: "Invalid password!" })
+      return res.status(401).json({ error: "Invalid password!" });
     }
 
     // Create a JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
     res.status(200).json({
       message: "Login successful /W/",
@@ -71,9 +72,9 @@ exports.loginUserController = async (req, res) => {
         userMail: user.userMail,
       },
       token,
-    })
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Login failed!" })
+    res.status(500).json({ error: "Login failed!" });
   }
-}
+};
