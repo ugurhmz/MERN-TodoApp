@@ -1,38 +1,95 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+}
+.container {
+    width: 100%;
+    max-width: 480px;
+    margin: 100px auto;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-title {
+    font-family: inherit;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    display: block;
+    text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.form-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-input {
+    width: 80%;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    background-color: #f9f9f9;
+    padding: 10px;
+    font-size: 20px;
+    color: #3d3d3d;
+}
+.form-btn {
+    height: 40px;
+    width: 20%;
+    border: 0;
+    outline: 0;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: 500;
+    text-transform: capitalize;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.todo-item {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: #f9f9f9;
 }
 
-.App-link {
-  color: #61dafb;
+.todo-item:nth-child( 2n+2 ) {
+    background: #fff;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.todo-item input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.todo-item label {
+    margin-right: 5px;
+    width: 90%;
+}
+
+.todo-item svg {
+    max-width: 20px;
+    max-height: 20px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    padding: 2px 5px;
+    margin: 0;
+    outline: 0;
+    border: 0;
+    background-color: #EF6262;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: bold;
 }
