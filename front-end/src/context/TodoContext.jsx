@@ -23,7 +23,7 @@ export const TodoProvider = ( props) => {
 
     fetchAllTodos()
 
-  }, [])
+  }, [todoArr])
 
     return (
         <TodoContext.Provider value={ [todoArr, setTodoArr] }>
