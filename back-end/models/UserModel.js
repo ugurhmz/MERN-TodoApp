@@ -15,6 +15,8 @@ const UserSchema = new Schema(
       required: true,
       minlength: 6
     },
+    resetPasswordToken: { type: String ,default: null},
+    resetPasswordExpiry: { type: Date,default: null },
     userTodos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo" }],
   },
   { timestamps: true }

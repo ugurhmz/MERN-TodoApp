@@ -34,7 +34,6 @@ exports.createTodoController = async (req,res) => {
     }
 }
 
-
 // Delete TODO
 exports.deleteTodoController = async (req,res) =>{
     try {

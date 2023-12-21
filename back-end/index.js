@@ -9,14 +9,12 @@ dotenv.config()
 
 // DB 
 connectDB()
-
+app.use(express.json()) // JSON Kabul
 app.use(cors())
-app.use(express.json())
 
 // Main Route
 app.use("/ugurv1/api", appRoutes)
 
-
 app.listen(process.env.PORT || 3500, () => {
-    console.log(`Listening: ${process.env.PORT}`);
+    console.log(`Listening: ${process.env.PORT}`)
 })
