@@ -2,6 +2,24 @@ const { default: mongoose } = require("mongoose")
 const TodoModel   = require("../models/TodoModel")
 const UserModel = require("../models/UserModel")
 
+// Get All Todos
+exports.getAllTodosController = async (req,res) => {
+    try {
+
+        const allTodos = await TodoModel.find()
+        .populate({
+            path:"todoUser",
+            select:"userMail userName"
+        })
+        res.status(200).json(allTodos)
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json(err)
+    }
+}
+
+
 // Create TODO
 exports.createTodoController = async (req,res) => {
     try {

@@ -6,7 +6,7 @@ function TodoItem(props) {
     <>
         <p className="todo-item">
             <input type="checkbox" value="" />
-            <label htmlFor=""> { props.title }</label>
+            <label htmlFor=""> { props.todoName }</label>
             <button type='button' className='btn-delete'>Delete</button>
         </p>
     </>
