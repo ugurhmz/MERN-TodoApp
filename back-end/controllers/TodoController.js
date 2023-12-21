@@ -19,6 +19,33 @@ exports.getAllTodosController = async (req,res) => {
     }
 }
 
+// Get One Todo by Owner
+exports.getTodoThatUserController = async (req,res) => {
+    try {
+     
+        const userTodos = await TodoModel.find({todoUser: req.userId})
+        .populate({
+            path:"todoUser",
+            select:"userName"
+            
+        })
+       
+        if (userTodos.length === 0) {
+            return res.status(204).json({
+                message: "No todos found for the user"
+            })
+        }
+
+        res.status(200).json({
+            userTodos
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err)
+    }
+}
+
 
 // Create TODO
 exports.createTodoController = async (req,res) => {
