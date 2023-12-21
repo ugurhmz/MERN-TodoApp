@@ -14,7 +14,7 @@ export const TodoProvider = ( props) => {
             const resData = await response.json()
 
             console.log("resData",resData)
-           // setTodoArr(resData)
+            setTodoArr(resData)
         } catch (err) {
             console.log(err)
 
