@@ -33,7 +33,7 @@ exports.registerUserController = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Registration failed !!" });
   }
-};
+}
 
 // Login
 exports.loginUserController = async (req, res) => {
@@ -78,7 +78,6 @@ exports.loginUserController = async (req, res) => {
     res.status(500).json({ error: "Login failed!" })
   }
 }
-
 
 // FORGET PASSWORD
 exports.resetPasswordController = async (req, res) => {
@@ -180,4 +179,6 @@ exports.resetPasswordLinkController = async (req, res) => {
     console.error(err);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: "Password reset failed!" });
   }
-};
+}
+
+// Update PW
