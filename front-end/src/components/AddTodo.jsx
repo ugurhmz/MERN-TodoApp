@@ -6,12 +6,12 @@ function AddTodo() {
   const [ todoArr, setTodoArr ] = useContext(TodoContext)
 
   const addMyTodo = (e) => {
-     if ( todoName == '') {
+     if ( todoName === '') {
         return;
      }
 
      const todoExample = [ ...todoArr, {
-        id: 1,
+        id: Math.random() * 101,
         todoname: todoName,
         complted: false
      }]
