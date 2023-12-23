@@ -38,7 +38,12 @@ exports.registerUserController = async (req, res) => {
 // Login
 exports.loginUserController = async (req, res) => {
   try {
-    const { userMail, password } = req.body;
+    const   password  = req.body.password;
+    const userMail   = req.body.userMail
+   
+     if (!userMail || !password || userMail === '' || password === '') {
+    return res.status(400).json({ error: "Empty field! Email and password are required!" });
+    }
 
     if (!userMail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       return res.status(400).json({ error: "Invalid email format!" });
@@ -53,12 +58,8 @@ exports.loginUserController = async (req, res) => {
     const decryptUserPassword = CryptoJs.AES.decrypt(findUser.password, process.env.PAS_SECURITY);
     const userDbPassword = decryptUserPassword.toString(CryptoJs.enc.Utf8);
 
-    console.log("req.body.password", req.body.password)
-    console.log("userDbPassword", userDbPassword)
-
 
     if (userDbPassword !== req.body.password) {
-      
       return res.status(401).json({ error: "Invalid password!" });
     }
 

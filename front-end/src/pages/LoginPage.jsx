@@ -1,18 +1,40 @@
 import React from 'react'
-import { useState  } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect  } from 'react'
+import { Link , useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
+import { useLoginMutation } from '../slices/usersApiSlice'
+import { setCredentials } from '../slices/authSlice'
 
 
 const LoginPage = () => {
 
-    const [email, setEmail] = useState('')
+    const [userMail, setUserEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const [ login, {isLoading}] = useLoginMutation()
+    const { userData } = useSelector((state) => state.auth)
+
+
+    useEffect(() => {
+        if(userData) {
+            navigate('/')
+        }
+    }, [navigate, userData])
 
     const formSubmitHandler = async (e) => {
         e.preventDefault()
-        console.log("Submit form")
+        try {
+            const res = await login({userMail, password}).unwrap()
+            dispatch(setCredentials({...res}))
+            navigate('/')
+        } catch(err) {
+            console.log(err?.data?.message || err.error);
+        }
     }
 
   return (
@@ -26,8 +48,8 @@ const LoginPage = () => {
                 <Form.Control
                     type='email'
                     placeholder='Enter email'
-                    value={email}
-                    onChange={ (e) => setEmail(e.target.value)}>
+                    value={userMail}
+                    onChange={ (e) => setUserEmail(e.target.value)}>
                 </Form.Control>
             </Form.Group>
 
