@@ -17,20 +17,22 @@ const LoginPage = () => {
     const dispatch = useDispatch()
 
     const [ login, {isLoading}] = useLoginMutation()
-    const { userData } = useSelector((state) => state.auth)
+    const { userInfo } = useSelector((state) => state.auth)
     const { addToast } = useToasts();
 
     useEffect(() => {
-        if(userData) {
+        if(userInfo) {
+            console.log("userInfo",userInfo)
             navigate('/')
         }
-    }, [navigate, userData])
+    }, [navigate, userInfo])
 
     const formSubmitHandler = async (e) => {
         e.preventDefault();
         try {
           const res = await login({ userMail, password }).unwrap()
-            dispatch(setCredentials({ ...res.data }));
+          console.log("MYRESSSSSS", res)
+            dispatch(setCredentials({ ...res}));
             navigate('/');
         } catch (err) {
           addToast(err?.data?.error || 'Bir hata oluştu!', { appearance: 'error', autoDismiss: true, autoDismissTimeout: 2500});

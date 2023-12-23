@@ -89,7 +89,7 @@ exports.resetPasswordController = async (req, res) => {
 
     if (!findUser) {
       return res.status(httpStatus.NOT_FOUND).json({
-        msg: "User not found, try again!",
+        error: "User not found, try again!",
       });
     }
 
@@ -133,7 +133,7 @@ exports.resetPasswordController = async (req, res) => {
       })
       .catch((err) => {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-          errormsg: err,
+          error: err,
         });
       })
   } catch (err) {
@@ -182,4 +182,29 @@ exports.resetPasswordLinkController = async (req, res) => {
   }
 }
 
-// Update PW
+// Logout
+exports.logOutController = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  console.log("headers1",req.headers)
+
+  if (authHeader !== null && authHeader !== undefined) {
+    const splitToken = authHeader.split(" ")[1];
+
+    try {
+      const decodedToken = jwt.verify(splitToken, process.env.JWT_SECRET_KEY);
+      const userId = decodedToken.userId;
+     
+      res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0),
+      });
+
+      console.log("headers2",req.headers)
+      res.status(httpStatus.OK).json({ message: "Logout successful" });
+    } catch (err) {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+    }
+  } else {
+    return res.status(httpStatus.UNAUTHORIZED).json({ error: "Authorization fail!" });
+  }
+};
