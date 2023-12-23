@@ -6,7 +6,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import { useLoginMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/authSlice'
-
+import { useToasts } from 'react-toast-notifications';
 
 const LoginPage = () => {
 
@@ -18,7 +18,7 @@ const LoginPage = () => {
 
     const [ login, {isLoading}] = useLoginMutation()
     const { userData } = useSelector((state) => state.auth)
-
+    const { addToast } = useToasts();
 
     useEffect(() => {
         if(userData) {
@@ -27,16 +27,16 @@ const LoginPage = () => {
     }, [navigate, userData])
 
     const formSubmitHandler = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            const res = await login({userMail, password}).unwrap()
-            dispatch(setCredentials({...res}))
-            navigate('/')
-        } catch(err) {
-            console.log(err?.data?.message || err.error);
+          const res = await login({ userMail, password }).unwrap()
+            dispatch(setCredentials({ ...res.data }));
+            navigate('/');
+        } catch (err) {
+          addToast(err?.data?.error || 'Bir hata oluştu!', { appearance: 'error', autoDismiss: true, autoDismissTimeout: 2500});
         }
-    }
-
+      };
+      
   return (
     <FormContainer>
         <h2>Login and Create Todo</h2>
@@ -77,6 +77,7 @@ const LoginPage = () => {
             </Row>
 
         </Form>
+       
     </FormContainer>
   )
 }

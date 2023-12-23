@@ -11,6 +11,7 @@ import { 
 import store from './store.js'
 import { Provider  } from 'react-redux'
 import './index.css'
+import { ToastProvider } from 'react-toast-notifications'; 
 import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
@@ -28,9 +29,11 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-      <React.StrictMode>
+    
+      <ToastProvider>
         <RouterProvider router={router} />
-      </React.StrictMode>
+      </ToastProvider>
+    
   </Provider>
   
 )
