@@ -1,12 +1,12 @@
-
-const jwt = require("jsonwebtoken")
-const UserModel = require("../models/UserModel.js")
-const nodemailer = require("nodemailer");
-const httpStatus = require("http-status")
-const CryptoJs = require('crypto-js')
+import jwt from "jsonwebtoken";
+import UserModel from "../models/UserModel.js";
+import nodemailer from "nodemailer";
+import httpStatus from "http-status";
+import CryptoJs from 'crypto-js';
+import  generateToken  from '../helper/generateToken.js';
 
 // Registration
-exports.registerUserController = async (req, res) => {
+export const registerUserController = async (req, res) => {
   try {
     const { userMail, userName, password } = req.body;
 
@@ -33,16 +33,16 @@ exports.registerUserController = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Registration failed !!" });
   }
-}
+};
 
 // Login
-exports.loginUserController = async (req, res) => {
+export const loginUserController = async (req, res) => {
   try {
-    const   password  = req.body.password;
-    const userMail   = req.body.userMail
-   
-     if (!userMail || !password || userMail === '' || password === '') {
-    return res.status(400).json({ error: "Empty field! Email and password are required!" });
+    const password = req.body.password;
+    const userMail = req.body.userMail;
+
+    if (!userMail || !password || userMail === '' || password === '') {
+      return res.status(400).json({ error: "Empty field! Email and password are required!" });
     }
 
     if (!userMail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -58,12 +58,11 @@ exports.loginUserController = async (req, res) => {
     const decryptUserPassword = CryptoJs.AES.decrypt(findUser.password, process.env.PAS_SECURITY);
     const userDbPassword = decryptUserPassword.toString(CryptoJs.enc.Utf8);
 
-
     if (userDbPassword !== req.body.password) {
       return res.status(401).json({ error: "Invalid password!" });
     }
 
-    const token = jwt.sign({ userId: findUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+    generateToken(res, findUser._id);
 
     res.status(200).json({
       message: "Login successful /W/",
@@ -71,17 +70,16 @@ exports.loginUserController = async (req, res) => {
         userId: findUser._id,
         userName: findUser.userName,
         userMail: findUser.userMail,
-      },
-      token,
+      }
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Login failed!" })
+    res.status(500).json({ error: "Login failed!" });
   }
-}
+};
 
 // FORGET PASSWORD
-exports.resetPasswordController = async (req, res) => {
+export const resetPasswordController = async (req, res) => {
   try {
     const email = req.body.userMail;
 
@@ -139,10 +137,10 @@ exports.resetPasswordController = async (req, res) => {
   } catch (err) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err)
   }
-}
+};
 
 // Reset PW Checker
-exports.resetPasswordLinkController = async (req, res) => {
+export const resetPasswordLinkController = async (req, res) => {
   try {
     const { token, newpw } = req.query
     if (!token) {
@@ -151,7 +149,7 @@ exports.resetPasswordLinkController = async (req, res) => {
 
     // Kullanıcıyı tokena göre bul
     const findUser = await UserModel.findOne({ resetPasswordToken: token });
-  
+
     if (!findUser) {
       return res.status(httpStatus.NOT_FOUND).json({ error: "User not found or invalid reset token!" });
     }
@@ -170,22 +168,22 @@ exports.resetPasswordLinkController = async (req, res) => {
       await findUser.save()
       res.status(httpStatus.OK).json({
         message: "Password reset successful.",
-        token, 
+        token,
       });
     } else {
-    
+
       res.status(httpStatus.BAD_REQUEST).json({ error: "Invalid token." });
     }
   } catch (err) {
     console.error(err);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: "Password reset failed!" });
   }
-}
+};
 
 // Logout
-exports.logOutController = async (req, res) => {
+export const logOutController = async (req, res) => {
   const authHeader = req.headers.authorization;
-  console.log("headers1",req.headers)
+  console.log("headers1", req.headers)
 
   if (authHeader !== null && authHeader !== undefined) {
     const splitToken = authHeader.split(" ")[1];
@@ -193,13 +191,8 @@ exports.logOutController = async (req, res) => {
     try {
       const decodedToken = jwt.verify(splitToken, process.env.JWT_SECRET_KEY);
       const userId = decodedToken.userId;
-     
-      res.cookie('jwt', '', {
-        httpOnly: true,
-        expires: new Date(0),
-      });
 
-      console.log("headers2",req.headers)
+      console.log("headers2", req.headers)
       res.status(httpStatus.OK).json({ message: "Logout successful" });
     } catch (err) {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });

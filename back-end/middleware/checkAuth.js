@@ -1,24 +1,24 @@
-const httpStatus = require('http-status');
-const jwt = require('jsonwebtoken');
+import httpStatus from 'http-status';
+import jwt from 'jsonwebtoken';
+import User from '../models/UserModel.js'; 
 
-exports.checkAuthenticated = (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(" ")[1]
-    console.log("token", token)
-    
-    if (!token) {
-      return res.status(httpStatus.UNAUTHORIZED).json({ error: "Unauthorized access" })
-    }
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-      if (err) {
-        return res.status(httpStatus.NETWORK_AUTHENTICATION_REQUIRED).json({ error: "Token is not valid!" })
-      }
-      console.log("decoded", decoded)
+export const checkAuthenticated = async (req, res, next) => {
+  const token = req.cookies.jwt;
+  console.log("NEW TOKEN", token);
+  
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      console.log("decoded.userId", decoded.userId)
       req.userId = decoded.userId
-      next()
-    })
-  } catch (error) {
-    console.error("Error ", error)
-    return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid authorization header" })
+      req.user = await User.findById(decoded.userId).select('-password')
+      
+      next();
+    } catch (err) {
+      console.error(err);
+      res.status(httpStatus.UNAUTHORIZED).json({ error: "Not authorized, token failed!!" })
+    }
+  } else {
+    res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid authorization header!!" })
   }
 }
