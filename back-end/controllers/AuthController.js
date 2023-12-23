@@ -180,24 +180,22 @@ export const resetPasswordLinkController = async (req, res) => {
   }
 };
 
-// Logout
+// LOGOUT
 export const logOutController = async (req, res) => {
-  const authHeader = req.headers.authorization;
-  console.log("headers1", req.headers)
+  try {
+    const token = req.cookies.jwt
 
-  if (authHeader !== null && authHeader !== undefined) {
-    const splitToken = authHeader.split(" ")[1];
-
-    try {
-      const decodedToken = jwt.verify(splitToken, process.env.JWT_SECRET_KEY);
-      const userId = decodedToken.userId;
-
-      console.log("headers2", req.headers)
-      res.status(httpStatus.OK).json({ message: "Logout successful" });
-    } catch (err) {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+    if (!token) {
+      return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid or missing JWT token" })
     }
-  } else {
-    return res.status(httpStatus.UNAUTHORIZED).json({ error: "Authorization fail!" });
+    jwt.verify(token, process.env.JWT_SECRET_KEY)
+
+    // Eğer başarılıysa, tokeni temizle 
+    res.cookie('jwt', '', { maxAge: 1, httpOnly: true })
+
+    res.status(httpStatus.OK).json({ message: "Logout successful" })
+  } catch (err) {
+    console.error(err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: "Logout failed" })
   }
-};
+}
