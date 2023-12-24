@@ -21,7 +21,7 @@ const RegisterPage = () => {
 
     const { userInfo } = useSelector( (state) => state.auth)
     const [register, {isLoading}] = useRegisterMutation();
-
+    
     useEffect(() => {
         if(userInfo) {
            navigate('/')
@@ -38,8 +38,8 @@ const RegisterPage = () => {
         } else {
             try {
                 const res = await register({ userMail, userName, password }).unwrap();
-                dispatch(setCredentials({ ...res.data }));
-                navigate('/');
+                console.log("register RES", res)
+                navigate('/login');
             } catch (err) {
                 addToast(err?.data?.error || 'Bir hata oluştu!', {
                     appearance: 'error',
