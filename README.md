@@ -81,10 +81,9 @@ This document provides information on the RESTful API endpoints for a simple Tod
 - **Description**: Logout the authenticated user.
 - **Request**:
   - **Headers**:
-    - `Authorization` (string, required): JWT token.
+    - (Optional) `Authorization` (string): JWT token.
 - **Responses**:
   - `200 OK`: Logout successful.
-  - `401 Unauthorized`: Invalid or missing JWT token.
   - `500 Internal Server Error`: Logout failed.
 
 ---
@@ -162,3 +161,11 @@ This document provides information on the RESTful API endpoints for a simple Tod
   - `403 Forbidden`: Unauthorized operation.
   - `404 Not Found`: Todo not found.
   - `500 Internal Server Error`: Todo deletion failed.
+
+---
+
+## Additional Notes
+
+- If a JWT token is provided in the `Authorization` header, it is recommended but not required for some endpoints.
+- Make sure to handle errors gracefully and provide meaningful error messages in the responses.
+
