@@ -1,6 +1,25 @@
+# .env Contents
+- DB_URL= MongoDB URL
+- PORT=Backend port
+- JWT_SECRET_KEY=
+- EMAIL_FROM=For SMTP Mail
+- EMAIL_PW=SMTP mail pw
+- FRONTEND_URL=http://localhost
+- PAS_SECURITY=
+
+
 # Todo App API Documentation
 
 This document provides information on the RESTful API endpoints for a simple Todo application. The API is designed to manage user authentication and todo items.
+
+## .env Contents
+- DB_URL= MongoDB URL
+- PORT=Backend port
+- JWT_SECRET_KEY=
+- EMAIL_FROM=For SMTP Mail
+- EMAIL_PW=SMTP mail pw
+- FRONTEND_URL=http://localhost
+- PAS_SECURITY=
 
 ## Table of Contents
 1. [Authentication](#authentication)
