@@ -183,19 +183,25 @@ export const resetPasswordLinkController = async (req, res) => {
 // LOGOUT
 export const logOutController = async (req, res) => {
   try {
-    const token = req.cookies.jwt
+    const token = req.cookies.jwt;
 
     if (!token) {
-      return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid or missing JWT token" })
+      return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid or missing JWT token" });
     }
-    jwt.verify(token, process.env.JWT_SECRET_KEY)
 
-    // Eğer başarılıysa, tokeni temizle 
-    res.cookie('jwt', '', { maxAge: 1, httpOnly: true })
+    // Çerezin doğrulanması ve hata kontrolü
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+      if (err) {
+        console.error(err);
+        return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid JWT token" });
+      }
 
-    res.status(httpStatus.OK).json({ message: "Logout successful" })
+      res.clearCookie('jwt');
+      res.status(httpStatus.OK).json({ message: "Logout successful" });
+    });
   } catch (err) {
     console.error(err);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: "Logout failed" })
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: "Logout failed" });
   }
-}
+};
+

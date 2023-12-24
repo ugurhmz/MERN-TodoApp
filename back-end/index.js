@@ -10,10 +10,14 @@ import cors from 'cors'
 connectDB()
 
 const app = express()
-
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
+
 
 // API
 app.use('/ugurv1/api', appRoutes);

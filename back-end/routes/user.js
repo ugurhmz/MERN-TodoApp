@@ -14,6 +14,6 @@ router.post("/register-user", registerUserController);
 router.post("/login-user", loginUserController);
 router.post("/reset-password", resetPasswordController);  // reset linkini gönderir
 router.get("/reset-password", resetPasswordLinkController);  // reset linkine tıkladığında, random pw'yi setler.
-router.post("/logout", checkAuthenticated, logOutController);
+router.post("/logout", logOutController);
 
 export default router;

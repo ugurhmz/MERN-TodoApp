@@ -5,6 +5,7 @@ import User from '../models/UserModel.js';
 export const checkAuthenticated = async (req, res, next) => {
   const token = req.cookies.jwt;
   console.log("NEW TOKEN", token);
+  console.log("NEW TOKEN2", req.headers.token);
   
   if (token) {
     try {
