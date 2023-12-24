@@ -7,6 +7,7 @@ import FormContainer from '../components/FormContainer'
 import { useLoginMutation } from '../slices/usersApiSlice'
 import { setCredentials } from '../slices/authSlice'
 import { useToasts } from 'react-toast-notifications';
+import Loader from '../components/Loader'
 
 const LoginPage = () => {
 
@@ -65,6 +66,8 @@ const LoginPage = () => {
                     onChange={ (e) => setPassword(e.target.value)}>
                 </Form.Control>
             </Form.Group>
+
+            { isLoading && <Loader/>}
 
              {/** Login Button */}
             <Button type='submit' variant='primary' className='mt-4'>

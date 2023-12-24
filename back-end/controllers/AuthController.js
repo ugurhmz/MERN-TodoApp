@@ -20,7 +20,7 @@ export const registerUserController = async (req, res) => {
 
     const existingUser = await UserModel.findOne({ userMail });
     if (existingUser) {
-      return res.status(409).json({ error: "User with this email already exists!" });
+      return res.status(409).json({ error: "This email already exist!" });
     }
 
     const encryptedPassword = CryptoJs.AES.encrypt(password, process.env.PAS_SECURITY).toString();
@@ -186,7 +186,7 @@ export const logOutController = async (req, res) => {
     const token = req.cookies.jwt;
 
     if (!token) {
-      return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid or missing JWT token" });
+      return res.status(httpStatus.UNAUTHORIZED).json({ error: "Invalid or missing JWT token", logout:true });
     }
 
     // Çerezin doğrulanması ve hata kontrolü
